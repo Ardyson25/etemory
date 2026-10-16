@@ -1,0 +1,8 @@
+# /etc/systemd/system/etermory-backup.service  (vm-db)
+[Unit]
+Description=Etermory - backup do banco e das fotos
+After=postgresql.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/etermory-backup

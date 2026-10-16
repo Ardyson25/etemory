@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "componentes/macros.html" import campo with context %}
+{% block titulo %}{{ "Editar álbum" if album else "Novo álbum" }}{% endblock %}
+{% block conteudo %}
+<section class="cartao">
+  <h1>{{ "Editar álbum" if album else "Novo álbum" }}</h1>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ campo(form.titulo, maxlength=80) }}
+    {{ campo(form.descricao, rows=3, maxlength=300) }}
+    {{ campo(form.publico) }}
+    {{ form.enviar(class="botao botao-primario") }}
+  </form>
+</section>
+{% endblock %}

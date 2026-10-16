@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block titulo %}Erro {{ codigo }}{% endblock %}
+{% block conteudo %}
+<section class="cartao cartao-estreito centro">
+  <p class="codigo-erro">{{ codigo }}</p>
+  <h1>{{ mensagem }}</h1>
+  <p><a class="botao" href="{{ url_for('timeline.index') }}">Voltar para a timeline</a></p>
+</section>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "componentes/macros.html" import avatar, acao, paginacao with context %}
+{% block titulo %}Notificações{% endblock %}
+{% block conteudo %}
+<h1>Notificações</h1>
+{% if notificacoes_nao_lidas %}
+  {{ acao(url_for('notificacoes.marcar_todas'), "Marcar todas como lidas") }}
+{% endif %}
+
+<ul class="notificacoes">
+  {% for n in pagina.items %}
+  <li class="notificacao {% if not n.lida %}nao-lida{% endif %} tipo-{{ n.tipo }}">
+    <form method="post" action="{{ url_for('notificacoes.abrir', notificacao_id=n.id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button type="submit" class="notificacao-botao">
+        {{ avatar(n.remetente, "avatar avatar-pequeno") }}
+        <span>{{ n.texto() }}</span>
+        <time class="discreto" datetime="{{ n.criado_em.isoformat() }}">{{ n.criado_em.strftime("%d/%m %H:%M") }}</time>
+      </button>
+    </form>
+  </li>
+  {% else %}
+  <li class="vazio">Nenhuma notificação por enquanto.</li>
+  {% endfor %}
+</ul>
+{{ paginacao(pagina, 'notificacoes.lista') }}
+{% endblock %}

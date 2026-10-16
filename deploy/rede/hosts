@@ -1,0 +1,8 @@
+# Bloco acrescentado ao /etc/hosts de TODAS as VMs (e, se quiser, do computador
+# hospedeiro) pelo scripts/provisionar/comum.sh.
+# >>> etermory
+192.168.56.10   vm-proxy
+192.168.56.11   vm-app1
+192.168.56.12   vm-app2
+192.168.56.20   vm-db
+# <<< etermory

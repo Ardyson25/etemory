@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>{% block titulo %}Etermory{% endblock %} · Etermory</title>
+  <link rel="icon" href="{{ url_for('static', filename='icons/logo.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/etermory.css') }}">
+  <script>
+    // Aplica o tema salvo antes de desenhar a página (evita "piscar").
+    try {
+      const tema = localStorage.getItem("etermory-tema");
+      if (tema) document.documentElement.dataset.theme = tema;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  {% if current_user.is_authenticated %}
+  <header class="topo">
+    <a class="logo" href="{{ url_for('timeline.index') }}">Etermory</a>
+    <nav class="menu" aria-label="Menu principal">
+      <a href="{{ url_for('timeline.index') }}">Timeline</a>
+      <a href="{{ url_for('polaroids.nova') }}" class="botao botao-primario botao-pequeno">+ Memória</a>
+      <a href="{{ url_for('notificacoes.lista') }}" class="sino" aria-label="Notificações">
+        Notificações
+        {% if notificacoes_nao_lidas %}<span class="contador">{{ notificacoes_nao_lidas }}</span>{% endif %}
+      </a>
+      <a href="{{ url_for('perfil.prontuario', username=current_user.username) }}">Prontuário</a>
+      <a href="{{ url_for('perfil.configuracoes') }}">Configurações</a>
+      <button type="button" class="botao-tema" data-alternar-tema aria-label="Alternar tema claro/escuro">◐</button>
+      <form method="post" action="{{ url_for('auth.sair') }}" class="inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="link">Sair</button>
+      </form>
+    </nav>
+  </header>
+  {% endif %}
+
+  <main class="conteudo">
+    {% with mensagens = get_flashed_messages(with_categories=true) %}
+      {% if mensagens %}
+      <div class="avisos">
+        {% for categoria, mensagem in mensagens %}
+          <p class="aviso aviso-{{ categoria }}" role="status">{{ mensagem }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block conteudo %}{% endblock %}
+  </main>
+
+  <script src="{{ url_for('static', filename='js/etermory.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

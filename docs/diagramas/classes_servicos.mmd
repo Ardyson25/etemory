@@ -1,0 +1,73 @@
+classDiagram
+    direction LR
+
+    class AuthService {
+        +cadastrar(nome, username, email, senha) Usuario
+        +autenticar(login, senha) Usuario
+    }
+    class PolaroidService {
+        +publicar(autor, dados, arquivo) Polaroid
+        +editar(autor, polaroid_id, dados) Polaroid
+        +arquivar(autor, polaroid_id) None
+        +mover_para_lixeira(autor, polaroid_id) None
+        +restaurar(autor, polaroid_id) None
+        +limpar_lixeira_expirada() int
+    }
+    class MidiaService {
+        +processar_upload(arquivo) Midia
+        +apagar_arquivo(midia) None
+    }
+    class TimelineService {
+        +para_voce(leitor, pagina) Pagina
+        +vinculos(leitor, pagina) Pagina
+    }
+    class VinculoService {
+        +seguir(seguidor, seguido) Vinculo
+        +deixar_de_seguir(seguidor, seguido) None
+        +responder(dono, vinculo_id, aceitar) None
+        +cancelar(seguidor, vinculo_id) None
+        +alternar_melhor_amigo(dono, seguidor_id) None
+    }
+    class InteracaoService {
+        +alternar_curtida(usuario, polaroid_id) bool
+        +comentar(autor, polaroid_id, texto) Comentario
+        +editar_comentario(autor, comentario_id, texto) None
+        +excluir_comentario(usuario, comentario_id) None
+    }
+    class NotificacaoService {
+        +notificar(tipo, remetente, destinatario, ...) None
+        +notificar_mencoes(remetente, texto, polaroid) None
+        +nao_lidas(usuario) int
+        +marcar_como_lidas(usuario, ids) None
+    }
+    class AlbumService {
+        +criar(dono, titulo, descricao, visibilidade) Album
+        +adicionar(dono, album_id, polaroid_id) None
+        +remover(dono, album_id, polaroid_id) None
+        +excluir(dono, album_id) None
+    }
+
+    class UsuarioRepository
+    class PolaroidRepository {
+        +visiveis_para(contexto, pagina) Pagina
+        +de_seguidos(contexto, pagina) Pagina
+        +expiradas_na_lixeira(dias) list
+    }
+    class VinculoRepository {
+        +contexto_do_leitor(usuario_id) ContextoLeitor
+    }
+    class NotificacaoRepository
+    class AlbumRepository
+
+    PolaroidService --> MidiaService
+    PolaroidService --> NotificacaoService
+    InteracaoService --> NotificacaoService
+    VinculoService --> NotificacaoService
+    PolaroidService --> PolaroidRepository
+    TimelineService --> PolaroidRepository
+    TimelineService --> VinculoRepository
+    VinculoService --> VinculoRepository
+    InteracaoService --> PolaroidRepository
+    NotificacaoService --> NotificacaoRepository
+    AlbumService --> AlbumRepository
+    AuthService --> UsuarioRepository

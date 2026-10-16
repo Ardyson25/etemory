@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "componentes/macros.html" import campo with context %}
+{% block titulo %}Editar Prontuário{% endblock %}
+{% block conteudo %}
+<section class="cartao">
+  <h1>Editar Prontuário</h1>
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {{ form.hidden_tag() }}
+    {{ campo(form.nome) }}
+    {{ campo(form.bio, rows=3, maxlength=300) }}
+    {{ campo(form.site, placeholder="https://") }}
+    {{ campo(form.foto, dica="JPEG, PNG ou WebP de até 5 MB.", accept="image/jpeg,image/png,image/webp") }}
+    {{ campo(form.capa, dica="JPEG, PNG ou WebP de até 5 MB.", accept="image/jpeg,image/png,image/webp") }}
+    {{ form.enviar(class="botao botao-primario") }}
+  </form>
+</section>
+{% endblock %}

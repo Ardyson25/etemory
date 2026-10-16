@@ -1,0 +1,11 @@
+# /etc/systemd/system/etermory-limpeza.timer  (só na vm-app1)
+[Unit]
+Description=Roda a limpeza da Lixeira todo dia às 03:30
+
+[Timer]
+OnCalendar=*-*-* 03:30:00
+Persistent=true          # se a VM estava desligada às 03:30, roda ao ligar
+RandomizedDelaySec=5min
+
+[Install]
+WantedBy=timers.target

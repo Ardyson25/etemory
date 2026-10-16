@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% from "componentes/macros.html" import campo with context %}
+{% block titulo %}{{ "Editar memória" if polaroid else "Nova memória" }}{% endblock %}
+{% block conteudo %}
+<section class="cartao">
+  <h1>{{ "Editar Registro de Memória" if polaroid else "Novo Registro de Memória" }}</h1>
+  <form method="post" enctype="multipart/form-data" novalidate class="form-polaroid">
+    {{ form.hidden_tag() }}
+
+    {% if not polaroid %}
+      {{ campo(form.foto, dica="JPEG, PNG ou WebP de até 5 MB.", accept="image/jpeg,image/png,image/webp") }}
+    {% elif polaroid.foto %}
+      <img class="previa" src="{{ url_for('polaroids.midia', nome=polaroid.foto.caminho_arquivo) }}" alt="">
+    {% endif %}
+
+    {{ campo(form.legenda, rows=4) }}
+    {{ campo(form.data_memoria) }}
+
+    <fieldset class="campo {% if form.emocoes.errors %}campo-erro{% endif %}" data-limite="3">
+      <legend>{{ form.emocoes.label.text }}</legend>
+      <div class="emocoes-opcoes">{{ form.emocoes() }}</div>
+      {% for erro in form.emocoes.errors %}<small class="erro">{{ erro }}</small>{% endfor %}
+    </fieldset>
+
+    {{ campo(form.estado) }}
+
+    <fieldset class="grupo">
+      <legend>Música</legend>
+      {{ campo(form.musica_titulo) }}
+      {{ campo(form.musica_artista) }}
+      {{ campo(form.musica_url, placeholder="https://open.spotify.com/...") }}
+    </fieldset>
+
+    {{ campo(form.local_nome) }}
+
+    <fieldset class="grupo">
+      <legend>Privacidade</legend>
+      {{ campo(form.visibilidade, dica="Automática: Pública se sua conta for pública, Seguidores se for privada.") }}
+      {{ campo(form.modo_comentarios) }}
+    </fieldset>
+
+    {{ form.enviar(class="botao botao-primario", value="Salvar alterações" if polaroid else "Registrar memória") }}
+  </form>
+</section>
+{% endblock %}
+{# Front-end: incluir aqui o image-editor.js da v3.7.6 (recorte, zoom, girar),
+   copiado para static/js/, num bloco {% block scripts %}. #}

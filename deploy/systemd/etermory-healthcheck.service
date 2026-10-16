@@ -1,0 +1,10 @@
+# /etc/systemd/system/etermory-healthcheck.service  (vm-proxy)
+[Unit]
+Description=Etermory - verificação de saúde das instâncias
+
+[Service]
+Type=oneshot
+User=deploy
+ExecStart=/usr/local/bin/etermory-healthcheck
+# Código 1 (uma instância fora) não deve marcar o serviço como "failed".
+SuccessExitStatus=1

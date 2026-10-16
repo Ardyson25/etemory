@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "componentes/macros.html" import acao with context %}
+{% block titulo %}{{ album.titulo }}{% endblock %}
+{% block conteudo %}
+{% set eh_dono = album.dono_id == current_user.id %}
+<section class="cartao">
+  <h1>{{ album.titulo }} {% if not album.eh_publico %}<span aria-label="Privado">🔒</span>{% endif %}</h1>
+  <p class="discreto">por <a href="{{ url_for('perfil.prontuario', username=album.dono.username) }}">@{{ album.dono.username }}</a></p>
+  {% if album.descricao %}<p>{{ album.descricao }}</p>{% endif %}
+  {% if eh_dono %}
+    <a class="botao" href="{{ url_for('albuns.editar', album_id=album.id) }}">Editar</a>
+    {{ acao(url_for('albuns.excluir', album_id=album.id), "Excluir álbum", "botao botao-perigo", "Excluir o álbum? As memórias continuam no seu Prontuário.") }}
+  {% endif %}
+</section>
+
+<div class="grade">
+  {% for p in polaroids %}
+  <div class="grade-item">
+    <a href="{{ url_for('polaroids.detalhe', polaroid_id=p.id) }}">
+      {% if p.foto %}<img src="{{ url_for('polaroids.midia', nome=p.foto.caminho_arquivo) }}" alt="{{ p.legenda | truncate(80) }}" loading="lazy">{% endif %}
+    </a>
+    {% if eh_dono %}
+      {{ acao(url_for('albuns.remover', album_id=album.id, polaroid_id=p.id), "Remover", "botao botao-pequeno") }}
+    {% endif %}
+  </div>
+  {% else %}
+  <p class="vazio">{% if eh_dono %}Abra uma memória e use "Adicionar ao álbum".{% else %}Nenhuma memória visível neste álbum.{% endif %}</p>
+  {% endfor %}
+</div>
+{% endblock %}

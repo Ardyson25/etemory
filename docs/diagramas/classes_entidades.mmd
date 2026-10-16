@@ -1,0 +1,167 @@
+classDiagram
+    direction LR
+
+    class Usuario {
+        +int id
+        +str nome
+        +str username
+        +str email
+        -str senha_hash
+        +str bio
+        +str site
+        +str foto
+        +str capa
+        +bool conta_privada
+        +ModoComentarios modo_comentarios_padrao
+        +datetime criado_em
+        +definir_senha(senha: str) None
+        +verificar_senha(senha: str) bool
+    }
+
+    class Polaroid {
+        +int id
+        +str legenda
+        +date data_memoria
+        +EstadoMemoria estado
+        +Visibilidade visibilidade
+        +ModoComentarios modo_comentarios
+        +str musica_titulo
+        +str musica_artista
+        +str musica_url
+        +str local_nome
+        -StatusPolaroid status
+        +datetime arquivada_em
+        +datetime excluida_em
+        +datetime criado_em
+        +datetime editado_em
+        +definir_emocoes(emocoes: list~Emocao~) None
+        +editar(dados) None
+        +arquivar() None
+        +desarquivar() None
+        +mover_para_lixeira() None
+        +restaurar() None
+        +visibilidade_efetiva() Visibilidade
+        +foi_editada() bool
+        +dias_restantes_na_lixeira() int
+    }
+
+    class Midia {
+        +int id
+        +str caminho_arquivo
+        +int ordem
+        +int largura
+        +int altura
+    }
+
+    class Comentario {
+        +int id
+        +str texto
+        +datetime criado_em
+        +datetime editado_em
+        +editar(novo_texto: str, editor: Usuario) None
+        +pode_ser_excluido_por(usuario: Usuario) bool
+    }
+
+    class Curtida {
+        +datetime criado_em
+    }
+
+    class Vinculo {
+        +int id
+        +StatusVinculo status
+        +bool melhor_amigo
+        +datetime criado_em
+        +datetime respondido_em
+        +aceitar() None
+        +recusar() None
+        +cancelar() None
+        +marcar_melhor_amigo() None
+        +desmarcar_melhor_amigo() None
+        +esta_ativo() bool
+    }
+
+    class Album {
+        +int id
+        +str titulo
+        +str descricao
+        +Visibilidade visibilidade
+        +datetime criado_em
+        +adicionar(polaroid: Polaroid) None
+        +remover(polaroid: Polaroid) None
+    }
+
+    class Visibilidade {
+        <<enumeration>>
+        AUTOMATICA
+        PUBLICA
+        SEGUIDORES
+        MELHORES_AMIGOS
+        SOMENTE_EU
+    }
+    class ModoComentarios {
+        <<enumeration>>
+        TODOS
+        SEGUIDORES
+        MELHORES_AMIGOS
+        NINGUEM
+    }
+    class StatusVinculo {
+        <<enumeration>>
+        PENDENTE
+        ACEITO
+        RECUSADO
+        CANCELADO
+    }
+    class StatusPolaroid {
+        <<enumeration>>
+        ATIVA
+        ARQUIVADA
+        LIXEIRA
+    }
+    class EstadoMemoria {
+        <<enumeration>>
+        PRESERVADA
+        SENSIVEL
+        FRAGMENTADA
+        REVISITADA
+    }
+    class Emocao {
+        <<enumeration>>
+        FELICIDADE
+        SAUDADE
+        AMOR
+        CORACAO_PARTIDO
+        SUPERACAO
+        RECOMECO
+        TRISTEZA
+        ACOLHIMENTO
+        GRATIDAO
+        CONQUISTA
+        MELANCOLIA
+        NOSTALGIA
+        DESPEDIDA
+        LIBERDADE
+        ESPERANCA
+        PAZ
+        ORGULHO
+        AMIZADE
+        CONFUSAO
+        MUDANCA
+    }
+
+    Usuario "1" --> "0..*" Polaroid : autor de
+    Usuario "1" --> "0..*" Vinculo : seguidor
+    Usuario "1" --> "0..*" Vinculo : seguido
+    Usuario "1" --> "0..*" Album : dono de
+    Polaroid "1" *-- "1..*" Midia : composição
+    Polaroid "1" *-- "0..*" Comentario : composição
+    Polaroid "1" *-- "0..*" Curtida : composição
+    Album "0..*" o-- "0..*" Polaroid : agregação
+    Usuario "1" --> "0..*" Comentario : escreve
+    Usuario "1" --> "0..*" Curtida : faz
+    Polaroid ..> Emocao : até 3
+    Polaroid ..> EstadoMemoria
+    Polaroid ..> StatusPolaroid
+    Polaroid ..> Visibilidade
+    Polaroid ..> ModoComentarios
+    Vinculo ..> StatusVinculo

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% from "componentes/macros.html" import polaroid_cartao, avatar, acao with context %}
+{% block titulo %}Memória de @{{ polaroid.autor.username }}{% endblock %}
+{% block conteudo %}
+{% set eh_autor = polaroid.autor_id == current_user.id %}
+
+{% if polaroid.status.name == "ARQUIVADA" %}
+  <p class="aviso aviso-aviso">Esta memória está no seu Arquivo Pessoal e só você a vê.</p>
+{% elif polaroid.status.name == "LIXEIRA" %}
+  <p class="aviso aviso-aviso">Esta memória está na Lixeira: {{ polaroid.dias_restantes_na_lixeira }} dia(s) para restaurar.</p>
+{% endif %}
+
+{{ polaroid_cartao(polaroid, completa=True) }}
+
+{% if eh_autor %}
+<section class="cartao acoes-autor">
+  {% if polaroid.status.name == "ATIVA" %}
+    <a class="botao" href="{{ url_for('polaroids.editar', polaroid_id=polaroid.id) }}">Editar</a>
+    {{ acao(url_for('polaroids.arquivar', polaroid_id=polaroid.id), "Arquivar") }}
+    {{ acao(url_for('polaroids.excluir', polaroid_id=polaroid.id), "Excluir", "botao botao-perigo", "Mover esta memória para a Lixeira?") }}
+    {% if albuns %}
+    <form method="post" action="{{ url_for('albuns.adicionar') }}" class="inline">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="polaroid_id" value="{{ polaroid.id }}">
+      <label for="album-destino" class="sr-only">Álbum</label>
+      <select id="album-destino" name="album_id">
+        {% for a in albuns %}
+          <option value="{{ a.id }}">{{ a.titulo }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="botao">Adicionar ao álbum</button>
+    </form>
+    {% endif %}
+  {% elif polaroid.status.name == "ARQUIVADA" %}
+    {{ acao(url_for('polaroids.desarquivar', polaroid_id=polaroid.id), "Desarquivar") }}
+  {% else %}
+    {{ acao(url_for('polaroids.restaurar', polaroid_id=polaroid.id), "Restaurar", "botao botao-primario") }}
+  {% endif %}
+</section>
+{% endif %}
+
+<section class="cartao" id="comentarios">
+  <h2>Comentários</h2>
+  <ul class="comentarios">
+    {% for c in polaroid.comentarios %}
+    <li id="comentario-{{ c.id }}" class="comentario">
+      {{ avatar(c.autor, "avatar avatar-pequeno") }}
+      <div class="comentario-corpo">
+        <p>
+          <a href="{{ url_for('perfil.prontuario', username=c.autor.username) }}"><strong>@{{ c.autor.username }}</strong></a>
+          {{ c.texto }}
+        </p>
+        <p class="discreto">
+          {{ c.criado_em.strftime("%d/%m/%Y %H:%M") }}{% if c.foi_editado %} · Editado{% endif %}
+        </p>
+        {% if c.pode_ser_editado_por(current_user) %}
+        <details class="editar-comentario">
+          <summary>Editar</summary>
+          <form method="post" action="{{ url_for('polaroids.editar_comentario', comentario_id=c.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <label for="texto-{{ c.id }}" class="sr-only">Comentário</label>
+            <textarea id="texto-{{ c.id }}" name="texto" maxlength="500" required>{{ c.texto }}</textarea>
+            <button type="submit" class="botao botao-pequeno">Salvar</button>
+          </form>
+        </details>
+        {% endif %}
+        {% if c.pode_ser_excluido_por(current_user) %}
+          {{ acao(url_for('polaroids.excluir_comentario', comentario_id=c.id), "Excluir", "link link-perigo", "Excluir este comentário?") }}
+        {% endif %}
+      </div>
+    </li>
+    {% else %}
+    <li class="vazio">Nenhum comentário ainda.</li>
+    {% endfor %}
+  </ul>
+
+  {% if pode_comentar %}
+  <form method="post" action="{{ url_for('polaroids.comentar', polaroid_id=polaroid.id) }}" class="novo-comentario">
+    {{ form_comentario.hidden_tag() }}
+    <label for="texto" class="sr-only">Comentário</label>
+    {{ form_comentario.texto(maxlength=500, rows=2, placeholder="Escreva um comentário... use @ para mencionar") }}
+    {{ form_comentario.enviar(class="botao botao-primario") }}
+  </form>
+  {% else %}
+  <p class="discreto">Os comentários desta memória estão limitados.</p>
+  {% endif %}
+</section>
+{% endblock %}

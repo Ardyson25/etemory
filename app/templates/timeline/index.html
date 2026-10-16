@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from "componentes/macros.html" import polaroid_cartao, paginacao with context %}
+{% block titulo %}Timeline{% endblock %}
+{% block conteudo %}
+<nav class="abas" aria-label="Abas da timeline">
+  <a href="{{ url_for('timeline.index', aba='para-voce') }}" class="aba {% if aba == 'para-voce' %}ativa{% endif %}">Para você</a>
+  <a href="{{ url_for('timeline.index', aba='vinculos') }}" class="aba {% if aba == 'vinculos' %}ativa{% endif %}">Vínculos</a>
+</nav>
+
+<section class="feed">
+  {% for p in pagina.items %}
+    {{ polaroid_cartao(p) }}
+  {% else %}
+    <p class="vazio">
+      {% if aba == 'vinculos' %}Crie vínculos para ver as memórias de outras pessoas aqui.
+      {% else %}Nenhuma memória ainda. <a href="{{ url_for('polaroids.nova') }}">Registre a primeira.</a>{% endif %}
+    </p>
+  {% endfor %}
+</section>
+
+{{ paginacao(pagina, 'timeline.index', aba=aba) }}
+{% endblock %}

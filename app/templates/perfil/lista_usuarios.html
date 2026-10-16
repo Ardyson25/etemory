@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "componentes/macros.html" import avatar with context %}
+{% block titulo %}{{ titulo }} de @{{ dono.username }}{% endblock %}
+{% block conteudo %}
+<h1>{{ titulo }} de <a href="{{ url_for('perfil.prontuario', username=dono.username) }}">@{{ dono.username }}</a></h1>
+<ul class="lista-pessoas">
+  {% for u in usuarios %}
+  <li>
+    <a href="{{ url_for('perfil.prontuario', username=u.username) }}">
+      {{ avatar(u, "avatar avatar-pequeno") }} <strong>{{ u.nome }}</strong> <span class="discreto">@{{ u.username }}</span>
+    </a>
+  </li>
+  {% else %}
+  <li class="vazio">Ninguém por aqui ainda.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,20 @@
+classDiagram
+    class Armazenamento {
+        <<abstract>>
+        +salvar(nome, dados, tipo)* None
+        +ler(nome)* bytes
+        +apagar(nome)* None
+    }
+    class ArmazenamentoDisco {
+        -Path pasta
+    }
+    class ArmazenamentoBanco
+    class MidiaService {
+        +processar_upload(arquivo) ImagemSalva
+        +ler(nome) bytes
+        +apagar(nome) None
+    }
+    Armazenamento <|-- ArmazenamentoDisco
+    Armazenamento <|-- ArmazenamentoBanco
+    MidiaService --> Armazenamento : usa
+    ArmazenamentoBanco ..> Arquivo : grava

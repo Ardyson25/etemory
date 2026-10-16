@@ -1,0 +1,12 @@
+# Um integrante por linha:  login;Nome completo;admin
+# admin = sim  -> entra no grupo sudo (só quem administra os servidores)
+# admin = nao  -> só o grupo etermory-dev
+# A chave pública SSH de cada um vai em deploy/chaves/<login>.pub
+# [PREENCHER com os logins reais do grupo]
+membro1;[PREENCHER] (Infraestrutura);sim
+membro2;[PREENCHER] (Scrum Master);sim
+membro3;[PREENCHER] (Product Owner);nao
+membro4;[PREENCHER] (Back-end 1);nao
+membro5;[PREENCHER] (Back-end 2);nao
+membro6;[PREENCHER] (Front-end);nao
+membro7;[PREENCHER] (QA);nao

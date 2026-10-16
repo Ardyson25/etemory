@@ -1,0 +1,21 @@
+sequenceDiagram
+    autonumber
+    actor Dev as Integrante
+    participant P as vm-proxy<br/>/srv/git/etermory.git
+    participant D as deploy.sh
+    participant A1 as vm-app1
+    participant A2 as vm-app2
+    Dev->>P: git push producao main
+    P->>P: hook post-receive: atualiza /opt/etermory/scripts
+    P->>D: etermory-deploy main
+    D->>A1: ssh atualizar_instancia.sh main 1
+    A1->>P: git fetch
+    A1->>A1: pip install, flask db upgrade, systemctl restart
+    Note over A1: durante o restart o Nginx usa só a app2
+    A1-->>D: /saude ok (ou rollback e código 4)
+    D->>A2: ssh atualizar_instancia.sh main 0
+    A2->>P: git fetch
+    A2->>A2: pip install, systemctl restart
+    Note over A2: durante o restart o Nginx usa só a app1
+    A2-->>D: /saude ok
+    D-->>Dev: "Deploy concluído em Ns" (aparece no terminal do git push)

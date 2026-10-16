@@ -1,0 +1,18 @@
+flowchart TB
+    Host["Computador hospedeiro<br/>192.168.56.1<br/>navegador e SSH"]
+
+    subgraph HostOnly["Rede host-only 192.168.56.0/24"]
+        P["vm-proxy .10<br/>Nginx :80 :443<br/>Git bare + hook<br/>backups remotos"]
+        A1["vm-app1 .11<br/>Gunicorn :8000<br/>etermory.service"]
+        A2["vm-app2 .12<br/>Gunicorn :8000<br/>etermory.service"]
+        D["vm-db .20<br/>PostgreSQL :5432<br/>NFS :2049<br/>backup.timer"]
+    end
+
+    Host -- "HTTPS 443 / SSH 22" --> P
+    P -- "8000 (upstream)" --> A1
+    P -- "8000 (upstream)" --> A2
+    A1 -- "5432 + NFS" --> D
+    A2 -- "5432 + NFS" --> D
+    D -. "rsync/SSH: cópia do backup" .-> P
+    A1 -. "git fetch (SSH)" .-> P
+    A2 -. "git fetch (SSH)" .-> P

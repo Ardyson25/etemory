@@ -1,0 +1,38 @@
+sequenceDiagram
+    autonumber
+    actor U as Usuário
+    participant N as Navegador
+    participant X as Nginx
+    participant R as Rota polaroids.criar
+    participant F as PolaroidForm (Flask-WTF)
+    participant PS as PolaroidService
+    participant MS as MidiaService (Pillow)
+    participant Repo as PolaroidRepository
+    participant NS as NotificacaoService
+    participant G as GeradorNotificacoes
+    participant BD as PostgreSQL
+
+    U->>N: Preenche a Polaroid e edita a foto
+    N->>X: POST /polaroids/nova (multipart + token CSRF)
+    X->>R: Encaminha para app1 ou app2
+    R->>F: validate_on_submit()
+    alt Formulário inválido (CSRF, legenda vazia, mais de 3 emoções, link sem https)
+        F-->>R: erros
+        R-->>N: 400 + formulário com mensagens
+    else Formulário válido
+        R->>PS: publicar(autor, dados, arquivo)
+        PS->>MS: processar_upload(arquivo)
+        MS->>MS: verifica tipo real e tamanho até 5 MB, redimensiona
+        MS-->>PS: Midia (caminho, largura, altura)
+        PS->>PS: Polaroid(...) e definir_emocoes()
+        PS->>Repo: salvar(polaroid)
+        Repo->>BD: INSERT polaroids, polaroid_emocoes, midias
+        PS->>NS: notificar_mencoes(autor, legenda, polaroid)
+        NS->>G: extrair_mencoes(legenda)
+        G-->>NS: usernames
+        NS->>BD: INSERT notificacoes (tipo = mencao)
+        PS->>BD: COMMIT
+        PS-->>R: polaroid
+        R-->>N: 302 redireciona para /polaroids/id
+        N-->>U: Exibe a Polaroid publicada
+    end

@@ -1,0 +1,114 @@
+erDiagram
+    usuarios ||--o{ polaroids : "escreve"
+    usuarios ||--o{ vinculos : "segue (seguidor_id)"
+    usuarios ||--o{ vinculos : "é seguido (seguido_id)"
+    usuarios ||--o{ albuns : "é dono"
+    usuarios ||--o{ comentarios : "escreve"
+    usuarios ||--o{ curtidas : "faz"
+    usuarios ||--o{ notificacoes : "recebe (destinatario_id)"
+    usuarios ||--o{ notificacoes : "gera (remetente_id)"
+    polaroids ||--|{ midias : "compõe"
+    polaroids ||--o{ polaroid_emocoes : "tem até 3"
+    polaroids ||--o{ comentarios : "compõe"
+    polaroids ||--o{ curtidas : "compõe"
+    polaroids ||--o{ notificacoes : "referencia"
+    comentarios ||--o{ notificacoes : "referencia"
+    albuns ||--o{ album_polaroid : "agrega"
+    polaroids ||--o{ album_polaroid : "aparece em"
+
+    usuarios {
+        int id PK
+        varchar nome
+        varchar username UK
+        varchar email UK
+        varchar senha_hash
+        varchar bio
+        varchar site
+        varchar foto
+        varchar capa
+        bool conta_privada
+        varchar modo_comentarios_padrao
+        timestamp criado_em
+    }
+    vinculos {
+        int id PK
+        int seguidor_id FK
+        int seguido_id FK
+        varchar status
+        bool melhor_amigo
+        timestamp criado_em
+        timestamp respondido_em
+    }
+    polaroids {
+        int id PK
+        int autor_id FK
+        text legenda
+        date data_memoria
+        varchar estado
+        varchar visibilidade
+        varchar modo_comentarios
+        varchar musica_titulo
+        varchar musica_artista
+        varchar musica_url
+        varchar local_nome
+        varchar status
+        timestamp arquivada_em
+        timestamp excluida_em
+        timestamp criado_em
+        timestamp editado_em
+    }
+    polaroid_emocoes {
+        int polaroid_id PK,FK
+        varchar emocao PK
+    }
+    midias {
+        int id PK
+        int polaroid_id FK
+        varchar caminho_arquivo
+        int ordem
+        int largura
+        int altura
+    }
+    curtidas {
+        int usuario_id PK,FK
+        int polaroid_id PK,FK
+        timestamp criado_em
+    }
+    comentarios {
+        int id PK
+        int polaroid_id FK
+        int autor_id FK
+        varchar texto
+        timestamp criado_em
+        timestamp editado_em
+    }
+    albuns {
+        int id PK
+        int dono_id FK
+        varchar titulo
+        varchar descricao
+        varchar visibilidade
+        timestamp criado_em
+    }
+    album_polaroid {
+        int album_id PK,FK
+        int polaroid_id PK,FK
+        timestamp adicionada_em
+    }
+    notificacoes {
+        int id PK
+        varchar tipo
+        int destinatario_id FK
+        int remetente_id FK
+        int polaroid_id FK
+        int comentario_id FK
+        bool lida
+        timestamp criado_em
+    }
+    arquivos {
+        varchar nome PK
+        varchar tipo
+        int tamanho
+        bytea dados
+        timestamp criado_em
+    }

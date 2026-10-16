@@ -1,0 +1,30 @@
+flowchart TB
+    Nav["Navegador<br/>HTML Jinja2 + CSS v3.7.6 + JS puro"]
+
+    subgraph Proxy["vm-proxy 192.168.56.10"]
+        NGX["Nginx<br/>balanceador e failover<br/>upstream app1/app2"]
+    end
+
+    subgraph App1["vm-app1 192.168.56.11"]
+        G1["Gunicorn :8000<br/>Flask - instancia app1"]
+    end
+
+    subgraph App2["vm-app2 192.168.56.12"]
+        G2["Gunicorn :8000<br/>Flask - instancia app2"]
+    end
+
+    subgraph DB["vm-db 192.168.56.20"]
+        PG[("PostgreSQL :5432")]
+        NFS[["Pasta de uploads<br/>exportada por NFS"]]
+        BKP[["Backups<br/>pg_dump + uploads"]]
+    end
+
+    Nav -- "HTTP 80/443" --> NGX
+    NGX -- "proxy_pass" --> G1
+    NGX -- "proxy_pass" --> G2
+    G1 --> PG
+    G2 --> PG
+    G1 -. "NFS" .-> NFS
+    G2 -. "NFS" .-> NFS
+    PG -. "backup diário" .-> BKP
+    NFS -. "backup diário" .-> BKP

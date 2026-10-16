@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# /srv/git/etermory.git/hooks/post-receive  (vm-proxy, dono deploy, modo 750)
+# Roda depois de cada "git push producao ...". Só a branch main dispara deploy.
+set -euo pipefail
+
+while read -r _antigo _novo referencia; do
+    if [[ "$referencia" == "refs/heads/main" ]]; then
+        # Atualiza os scripts e configurações da própria vm-proxy em /opt/etermory
+        git --work-tree=/opt/etermory checkout -f main -- scripts deploy
+        chmod 750 /opt/etermory/scripts/*.sh
+        echo ">>> Push na main recebido: iniciando deploy (uma instância por vez)"
+        /usr/local/bin/etermory-deploy main
+    else
+        echo ">>> ${referencia} recebida; só a main é publicada."
+    fi
+done

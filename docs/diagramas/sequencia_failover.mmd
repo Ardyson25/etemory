@@ -1,0 +1,15 @@
+sequenceDiagram
+    autonumber
+    participant N as Navegador
+    participant X as Nginx (vm-proxy)
+    participant A1 as app1
+    participant A2 as app2
+    N->>X: GET /
+    X->>A1: tenta (round-robin)
+    A1--xX: conexão recusada / sem resposta em 2 s
+    Note over X: falha 1 de 2 da app1;<br/>error.log: "connect() failed ... upstream: 192.168.56.11:8000"
+    X->>A2: proxy_next_upstream: mesmo pedido
+    A2-->>X: 200
+    X-->>N: 200 (o usuário não vê o erro)
+    Note over X: depois de 2 falhas, app1 fica fora por 15 s;<br/>todos os pedidos vão direto para a app2
+    Note over X,A1: a cada 15 s o Nginx testa a app1 de novo;<br/>quando ela volta, o round-robin recomeça

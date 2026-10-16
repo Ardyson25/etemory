@@ -1,0 +1,44 @@
+Endpoint                      Methods    Rule                                            
+----------------------------  ---------  ------------------------------------------------
+albuns.adicionar              POST       /albuns/adicionar                               
+albuns.detalhe                GET        /albuns/<int:album_id>                          
+albuns.editar                 GET, POST  /albuns/<int:album_id>/editar                   
+albuns.excluir                POST       /albuns/<int:album_id>/excluir                  
+albuns.lista                  GET        /albuns/                                        
+albuns.novo                   GET, POST  /albuns/novo                                    
+albuns.remover                POST       /albuns/<int:album_id>/remover/<int:polaroid_id>
+auth.cadastro                 GET, POST  /cadastro                                       
+auth.entrar                   GET, POST  /entrar                                         
+auth.sair                     POST       /sair                                           
+notificacoes.abrir            POST       /notificacoes/<int:notificacao_id>/abrir        
+notificacoes.lista            GET        /notificacoes/                                  
+notificacoes.marcar_todas     POST       /notificacoes/marcar-todas                      
+perfil.alternar_melhor_amigo  POST       /vinculos/melhores-amigos/<int:seguidor_id>     
+perfil.cancelar_solicitacao   POST       /@<username>/cancelar-solicitacao               
+perfil.configuracoes          GET, POST  /configuracoes                                  
+perfil.deixar_de_seguir       POST       /@<username>/deixar-de-seguir                   
+perfil.editar                 GET, POST  /perfil/editar                                  
+perfil.melhores_amigos        GET        /vinculos/melhores-amigos                       
+perfil.prontuario             GET        /@<username>                                    
+perfil.responder              POST       /vinculos/<int:vinculo_id>/<acao>               
+perfil.seguidores             GET        /@<username>/seguidores                         
+perfil.seguindo               GET        /@<username>/seguindo                           
+perfil.seguir                 POST       /@<username>/seguir                             
+perfil.solicitacoes           GET        /vinculos/solicitacoes                          
+polaroids.arquivar            POST       /polaroids/<int:polaroid_id>/arquivar           
+polaroids.arquivo             GET        /arquivo                                        
+polaroids.comentar            POST       /polaroids/<int:polaroid_id>/comentarios        
+polaroids.curtir              POST       /polaroids/<int:polaroid_id>/curtir             
+polaroids.desarquivar         POST       /polaroids/<int:polaroid_id>/desarquivar        
+polaroids.detalhe             GET        /polaroids/<int:polaroid_id>                    
+polaroids.editar              GET, POST  /polaroids/<int:polaroid_id>/editar             
+polaroids.editar_comentario   POST       /comentarios/<int:comentario_id>/editar         
+polaroids.excluir             POST       /polaroids/<int:polaroid_id>/excluir            
+polaroids.excluir_comentario  POST       /comentarios/<int:comentario_id>/excluir        
+polaroids.lixeira             GET        /lixeira                                        
+polaroids.midia               GET        /midia/<nome>                                   
+polaroids.nova                GET, POST  /polaroids/nova                                 
+polaroids.restaurar           POST       /polaroids/<int:polaroid_id>/restaurar          
+saude.saude                   GET        /saude                                          
+static                        GET        /static/<path:filename>                         
+timeline.index                GET        /                                               

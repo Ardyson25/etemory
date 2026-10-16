@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "componentes/macros.html" import campo with context %}
+{% block titulo %}Entrar{% endblock %}
+{% block conteudo %}
+<section class="cartao cartao-estreito">
+  <h1 class="logo logo-grande">Etermory</h1>
+  <p class="lema">Memórias que permanecem.</p>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ campo(form.login, autocomplete="username") }}
+    {{ campo(form.senha, autocomplete="current-password") }}
+    {{ campo(form.lembrar) }}
+    {{ form.enviar(class="botao botao-primario botao-largo") }}
+  </form>
+  <p class="centro">Ainda não tem conta? <a href="{{ url_for('auth.cadastro') }}">Criar conta</a></p>
+</section>
+{% endblock %}

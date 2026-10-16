@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% from "componentes/macros.html" import acao with context %}
+{% block titulo %}Arquivo Pessoal{% endblock %}
+{% block conteudo %}
+<h1>Arquivo Pessoal</h1>
+<p class="discreto">Memórias guardadas longe do Prontuário. Só você as vê.</p>
+<div class="grade">
+  {% for p in polaroids %}
+  <div class="grade-item">
+    <a href="{{ url_for('polaroids.detalhe', polaroid_id=p.id) }}">
+      {% if p.foto %}<img src="{{ url_for('polaroids.midia', nome=p.foto.caminho_arquivo) }}" alt="{{ p.legenda | truncate(80) }}">{% endif %}
+    </a>
+    {{ acao(url_for('polaroids.desarquivar', polaroid_id=p.id), "Desarquivar", "botao botao-pequeno") }}
+  </div>
+  {% else %}
+  <p class="vazio">Seu Arquivo está vazio.</p>
+  {% endfor %}
+</div>
+{% endblock %}

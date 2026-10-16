@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "componentes/macros.html" import acao with context %}
+{% block titulo %}Lixeira{% endblock %}
+{% block conteudo %}
+<h1>Lixeira</h1>
+<p class="discreto">Memórias excluídas ficam aqui por 30 dias. Depois disso são apagadas de vez, com comentários, curtidas e fotos.</p>
+<div class="grade">
+  {% for p in polaroids %}
+  <div class="grade-item">
+    <a href="{{ url_for('polaroids.detalhe', polaroid_id=p.id) }}">
+      {% if p.foto %}<img src="{{ url_for('polaroids.midia', nome=p.foto.caminho_arquivo) }}" alt="{{ p.legenda | truncate(80) }}">{% endif %}
+    </a>
+    <small>{{ p.dias_restantes_na_lixeira }} dia(s) restantes</small>
+    {{ acao(url_for('polaroids.restaurar', polaroid_id=p.id), "Restaurar", "botao botao-pequeno") }}
+  </div>
+  {% else %}
+  <p class="vazio">A Lixeira está vazia.</p>
+  {% endfor %}
+</div>
+{% endblock %}

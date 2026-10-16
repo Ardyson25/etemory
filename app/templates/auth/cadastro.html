@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% from "componentes/macros.html" import campo with context %}
+{% block titulo %}Criar conta{% endblock %}
+{% block conteudo %}
+<section class="cartao cartao-estreito">
+  <h1 class="logo logo-grande">Etermory</h1>
+  <p class="lema">Abra o seu Prontuário de memórias.</p>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ campo(form.nome, autocomplete="name") }}
+    {{ campo(form.username, dica="3 a 24 caracteres: letras minúsculas, números, ponto e sublinhado.", autocomplete="username") }}
+    {{ campo(form.email, autocomplete="email") }}
+    {{ campo(form.senha, dica="Mínimo de 8 caracteres.", autocomplete="new-password") }}
+    {{ campo(form.confirmar, autocomplete="new-password") }}
+    {{ form.enviar(class="botao botao-primario botao-largo") }}
+  </form>
+  <p class="centro">Já tem conta? <a href="{{ url_for('auth.entrar') }}">Entrar</a></p>
+</section>
+{% endblock %}

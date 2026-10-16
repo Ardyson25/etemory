@@ -1,0 +1,10 @@
+# /etc/systemd/system/etermory-backup.timer  (vm-db)
+[Unit]
+Description=Backup diário do Etermory às 02:00
+
+[Timer]
+OnCalendar=*-*-* 02:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

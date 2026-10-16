@@ -1,0 +1,8 @@
+stateDiagram-v2
+    [*] --> ATIVA : publicar
+    ATIVA --> ARQUIVADA : arquivar()
+    ARQUIVADA --> ATIVA : desarquivar()
+    ATIVA --> LIXEIRA : mover_para_lixeira()
+    ARQUIVADA --> LIXEIRA : mover_para_lixeira()
+    LIXEIRA --> ATIVA : restaurar() em até 30 dias
+    LIXEIRA --> [*] : limpeza após 30 dias

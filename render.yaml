@@ -1,0 +1,40 @@
+# Blueprint do Render (Fase 3). No painel: New > Blueprint > escolher este repositório.
+# O banco fica no Neon (PostgreSQL gratuito sem prazo de expiração); cole a
+# string de conexão DIRETA (sem "-pooler") em DATABASE_URL quando o Render pedir.
+services:
+  - type: web
+    name: etermory
+    runtime: python
+    plan: free
+    region: virginia            # mesma região do banco no Neon (AWS us-east-1)
+    branch: main
+    autoDeploy: true            # cada merge na main publica de novo
+    buildCommand: pip install -r requirements.txt
+    # O plano gratuito não tem cron nem pre-deploy: as migrações e a limpeza
+    # da Lixeira (RN14) rodam a cada vez que o serviço sobe.
+    startCommand: >-
+      flask --app wsgi db upgrade &&
+      flask --app wsgi limpar-lixeira &&
+      gunicorn -c gunicorn.conf.py wsgi:app
+    healthCheckPath: /saude
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.10
+      - key: ETERMORY_AMBIENTE
+        value: producao
+      - key: SECRET_KEY
+        generateValue: true     # o Render gera um valor aleatório
+      - key: DATABASE_URL
+        sync: false             # preenchido à mão no painel (segredo)
+      - key: INSTANCIA
+        value: render
+      - key: ARMAZENAMENTO
+        value: banco            # o disco do plano gratuito é apagado a cada reinício
+      - key: COOKIE_SEGURO
+        value: "1"
+      - key: ATRAS_DE_PROXY
+        value: "1"
+      - key: WEB_CONCURRENCY
+        value: "2"
+      - key: FORWARDED_ALLOW_IPS
+        value: "*"

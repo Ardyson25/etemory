@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "componentes/macros.html" import avatar, acao with context %}
+{% block titulo %}Solicitações de vínculo{% endblock %}
+{% block conteudo %}
+<h1>Solicitações de vínculo</h1>
+<ul class="lista-pessoas">
+  {% for v in pendentes %}
+  <li>
+    <a href="{{ url_for('perfil.prontuario', username=v.seguidor.username) }}">
+      {{ avatar(v.seguidor, "avatar avatar-pequeno") }} <strong>{{ v.seguidor.nome }}</strong> <span class="discreto">@{{ v.seguidor.username }}</span>
+    </a>
+    <span>
+      {{ acao(url_for('perfil.responder', vinculo_id=v.id, acao='aceitar'), "Aceitar", "botao botao-primario botao-pequeno") }}
+      {{ acao(url_for('perfil.responder', vinculo_id=v.id, acao='recusar'), "Recusar", "botao botao-pequeno") }}
+    </span>
+  </li>
+  {% else %}
+  <li class="vazio">Nenhuma solicitação pendente.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

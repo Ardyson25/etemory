@@ -1,0 +1,4 @@
+flowchart LR
+    U["Navegador"] -- "HTTPS" --> R["Render<br/>Gunicorn + Flask<br/>INSTANCIA=render"]
+    R -- "TLS 5432<br/>DATABASE_URL" --> N[("Neon<br/>PostgreSQL<br/>tabelas + arquivos")]
+    G["GitHub<br/>branch main"] -- "autoDeploy" --> R

@@ -1,0 +1,13 @@
+flowchart LR
+    R["routes/<br/>blueprints: auth, timeline,<br/>polaroids, perfil, albuns,<br/>notificacoes"]
+    S["services/<br/>regras de negócio"]
+    D["domain/<br/>POO pura: regras de<br/>visibilidade, notificações, enums"]
+    Rep["repositories/<br/>consultas"]
+    M["models/<br/>SQLAlchemy"]
+    BD[("PostgreSQL")]
+
+    R --> S
+    S --> D
+    S --> Rep
+    Rep --> M
+    M --> BD

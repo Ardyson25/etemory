@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% from "componentes/macros.html" import avatar, acao with context %}
+{% block titulo %}Melhores amigos{% endblock %}
+{% block conteudo %}
+<h1>Melhores amigos</h1>
+<p class="discreto">Só seguidores podem ser melhores amigos. Eles veem as memórias marcadas como "Melhores amigos".</p>
+<ul class="lista-pessoas">
+  {% for v in vinculos %}
+  <li>
+    <a href="{{ url_for('perfil.prontuario', username=v.seguidor.username) }}">
+      {{ avatar(v.seguidor, "avatar avatar-pequeno") }} <strong>{{ v.seguidor.nome }}</strong> <span class="discreto">@{{ v.seguidor.username }}</span>
+    </a>
+    {% if v.melhor_amigo %}
+      {{ acao(url_for('perfil.alternar_melhor_amigo', seguidor_id=v.seguidor_id), "★ Melhor amigo · remover", "botao botao-pequeno") }}
+    {% else %}
+      {{ acao(url_for('perfil.alternar_melhor_amigo', seguidor_id=v.seguidor_id), "☆ Marcar como melhor amigo", "botao botao-pequeno") }}
+    {% endif %}
+  </li>
+  {% else %}
+  <li class="vazio">Você ainda não tem seguidores.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

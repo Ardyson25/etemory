@@ -1,0 +1,200 @@
+/* Etermory — estilo base.
+   Paleta: vinho #8C1A11 e creme #FBF2D0, tema claro e escuro.
+   Front-end: consolidar aqui o CSS da v3.7.6 mantendo as classes usadas nos templates. */
+
+:root {
+  --vinho: #8C1A11;
+  --vinho-escuro: #6b130c;
+  --creme: #FBF2D0;
+  --fundo: var(--creme);
+  --texto: #2b1a17;
+  --texto-suave: #6e5a52;
+  --borda: rgba(140, 26, 17, 0.18);
+  --sombra-clara: rgba(255, 255, 255, 0.7);
+  --sombra-escura: rgba(110, 70, 40, 0.22);
+  --perigo: #b3261e;
+  --sucesso: #2e6b3a;
+  --raio: 10px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fundo: #1c1210;
+    --texto: #f3e7c8;
+    --texto-suave: #c2ae96;
+    --borda: rgba(251, 242, 208, 0.16);
+    --sombra-clara: rgba(255, 255, 255, 0.05);
+    --sombra-escura: rgba(0, 0, 0, 0.55);
+    --vinho: #c4473a;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --fundo: #1c1210;
+  --texto: #f3e7c8;
+  --texto-suave: #c2ae96;
+  --borda: rgba(251, 242, 208, 0.16);
+  --sombra-clara: rgba(255, 255, 255, 0.05);
+  --sombra-escura: rgba(0, 0, 0, 0.55);
+  --vinho: #c4473a;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.5;
+}
+
+a { color: var(--vinho); }
+img { max-width: 100%; height: auto; display: block; }
+h1, h2 { font-weight: normal; letter-spacing: 0.01em; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- Topo ---------- */
+.topo {
+  display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; justify-content: space-between;
+  padding: 0.75rem 1rem; border-bottom: 1px solid var(--borda);
+  position: sticky; top: 0; background: var(--fundo); z-index: 10;
+}
+.logo { font-size: 1.5rem; color: var(--vinho); text-decoration: none; font-style: italic; }
+.logo-grande { font-size: 2.5rem; text-align: center; margin: 0; }
+.lema { text-align: center; color: var(--texto-suave); margin-top: 0; }
+.menu { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+.menu a { text-decoration: none; }
+.contador {
+  background: var(--vinho); color: var(--creme); border-radius: 999px;
+  font-size: 0.75rem; padding: 0 0.45rem; margin-left: 0.2rem;
+}
+
+.conteudo { max-width: 640px; margin: 0 auto; padding: 1rem 16px 3rem; }
+
+/* ---------- Relevo (a Polaroid tem a cor do fundo) ---------- */
+.cartao, .polaroid {
+  background: var(--fundo);
+  border-radius: var(--raio);
+  box-shadow: 4px 4px 12px var(--sombra-escura), -4px -4px 12px var(--sombra-clara);
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+}
+.cartao-estreito { max-width: 420px; margin: 2rem auto; }
+
+/* ---------- Polaroid ---------- */
+.polaroid { padding: 0.9rem 0.9rem 1.2rem; }
+.polaroid-autor { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; }
+.polaroid-autor a { display: flex; gap: 0.5rem; align-items: center; text-decoration: none; color: inherit; }
+.polaroid-foto img { width: 100%; border-radius: 4px; }
+.polaroid-corpo { padding-top: 0.75rem; }
+.legenda { white-space: pre-line; margin: 0 0 0.5rem; }
+.meta { display: flex; flex-wrap: wrap; gap: 0.6rem; font-size: 0.85rem; color: var(--texto-suave); margin: 0 0 0.4rem; }
+.emocoes { display: flex; flex-wrap: wrap; gap: 0.35rem; list-style: none; padding: 0; margin: 0 0 0.5rem; }
+.emocoes li, .selo { border: 1px solid var(--borda); border-radius: 999px; padding: 0 0.6rem; font-size: 0.8rem; }
+.estado { font-style: italic; }
+.musica, .local { margin: 0.2rem 0; font-size: 0.9rem; }
+.polaroid-acoes { display: flex; gap: 1rem; align-items: center; margin-top: 0.75rem; font-size: 0.9rem; }
+.curtir { background: none; border: none; cursor: pointer; font: inherit; color: var(--texto-suave); padding: 0; }
+.curtir.curtido { color: var(--vinho); }
+
+/* ---------- Grade do Prontuário ---------- */
+.grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+.grade-item { display: flex; flex-direction: column; gap: 0.3rem; }
+.grade-item img { aspect-ratio: 1; object-fit: cover; width: 100%; border-radius: 4px; }
+
+/* ---------- Prontuário ---------- */
+.capa { height: 140px; border-radius: var(--raio); overflow: hidden; background: var(--borda); }
+.capa img { width: 100%; height: 100%; object-fit: cover; }
+.prontuario-cabecalho { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; margin-top: -40px; padding: 0 0.5rem; }
+.prontuario-cabecalho h1 { margin: 2.6rem 0 0; font-size: 1.5rem; }
+.prontuario-acoes { display: flex; flex-wrap: wrap; gap: 0.4rem; width: 100%; }
+.contadores { display: flex; gap: 1rem; }
+.contadores a { text-decoration: none; color: inherit; }
+.bio { white-space: pre-line; }
+
+.avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: var(--borda); }
+.avatar-pequeno { width: 32px; height: 32px; }
+.avatar-grande { width: 88px; height: 88px; border: 3px solid var(--fundo); }
+
+/* ---------- Abas ---------- */
+.abas { display: flex; gap: 1rem; border-bottom: 1px solid var(--borda); margin: 1rem 0; }
+.aba { padding: 0.5rem 0; text-decoration: none; color: var(--texto-suave); border-bottom: 2px solid transparent; }
+.aba.ativa { color: var(--vinho); border-bottom-color: var(--vinho); }
+
+/* ---------- Formulários ---------- */
+.campo { display: flex; flex-direction: column; gap: 0.25rem; margin-bottom: 0.9rem; border: none; padding: 0; }
+.campo label, legend { font-size: 0.9rem; }
+input[type="text"], input[type="email"], input[type="password"], input[type="date"],
+input:not([type]), select, textarea {
+  font: inherit; color: var(--texto); background: transparent;
+  border: 1px solid var(--borda); border-radius: 6px; padding: 0.55rem 0.65rem; width: 100%;
+}
+textarea { resize: vertical; }
+input:focus, select:focus, textarea:focus, button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--vinho); outline-offset: 2px;
+}
+.grupo { border: 1px solid var(--borda); border-radius: var(--raio); padding: 0.75rem; margin-bottom: 0.9rem; }
+.checkbox { display: flex; gap: 0.5rem; align-items: center; }
+.emocoes-opcoes ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.emocoes-opcoes li { display: flex; gap: 0.25rem; align-items: center; border: 1px solid var(--borda); border-radius: 999px; padding: 0.15rem 0.6rem; }
+.dica { color: var(--texto-suave); font-size: 0.8rem; }
+.erro { color: var(--perigo); font-size: 0.85rem; }
+.campo-erro input, .campo-erro textarea, .campo-erro select { border-color: var(--perigo); }
+.previa { max-height: 240px; width: auto; margin-bottom: 1rem; border-radius: 4px; }
+
+/* ---------- Botões ---------- */
+.botao {
+  display: inline-block; font: inherit; cursor: pointer; text-decoration: none;
+  color: var(--vinho); background: transparent; border: 1px solid var(--vinho);
+  border-radius: 999px; padding: 0.4rem 1rem;
+}
+.botao-primario { background: var(--vinho); color: var(--creme); }
+.botao-primario:hover { background: var(--vinho-escuro); }
+.botao-perigo { color: var(--perigo); border-color: var(--perigo); }
+.botao-pequeno { padding: 0.2rem 0.7rem; font-size: 0.85rem; }
+.botao-largo { width: 100%; }
+.botao-tema { background: none; border: 1px solid var(--borda); border-radius: 50%; width: 2rem; height: 2rem; cursor: pointer; color: inherit; }
+.link { background: none; border: none; color: var(--vinho); cursor: pointer; font: inherit; padding: 0; text-decoration: underline; }
+.link-perigo { color: var(--perigo); }
+.inline { display: inline; }
+
+/* ---------- Avisos ---------- */
+.aviso { border-radius: 6px; padding: 0.6rem 0.8rem; border: 1px solid var(--borda); }
+.aviso-erro { border-color: var(--perigo); color: var(--perigo); }
+.aviso-sucesso { border-color: var(--sucesso); color: var(--sucesso); }
+
+/* ---------- Listas ---------- */
+.lista-pessoas, .comentarios, .notificacoes { list-style: none; padding: 0; }
+.lista-pessoas li { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; padding: 0.5rem 0; border-bottom: 1px solid var(--borda); }
+.lista-pessoas a { display: flex; gap: 0.5rem; align-items: center; text-decoration: none; color: inherit; }
+.comentario { display: flex; gap: 0.6rem; padding: 0.5rem 0; border-bottom: 1px solid var(--borda); }
+.comentario p { margin: 0; }
+.novo-comentario { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem; }
+.notificacao-botao {
+  display: flex; gap: 0.6rem; align-items: center; width: 100%; text-align: left;
+  font: inherit; color: inherit; background: none; border: none; border-bottom: 1px solid var(--borda);
+  padding: 0.6rem 0.25rem; cursor: pointer;
+}
+.notificacao.nao-lida .notificacao-botao { font-weight: bold; }
+.notificacao-botao time { margin-left: auto; }
+.lista-albuns .album { display: block; text-decoration: none; color: inherit; }
+
+.paginacao { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin: 1rem 0; }
+.discreto { color: var(--texto-suave); font-size: 0.85rem; }
+.vazio { color: var(--texto-suave); text-align: center; padding: 2rem 0; }
+.centro { text-align: center; }
+.codigo-erro { font-size: 4rem; color: var(--vinho); margin: 0; }
+.acoes-autor { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+
+@media (max-width: 480px) {
+  .grade { grid-template-columns: repeat(2, 1fr); }
+  .menu { font-size: 0.9rem; gap: 0.5rem; }
+}

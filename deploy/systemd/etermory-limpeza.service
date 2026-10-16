@@ -1,0 +1,13 @@
+# /etc/systemd/system/etermory-limpeza.service  (só na vm-app1)
+# Apaga de vez as memórias com 30 dias ou mais na Lixeira (RN14).
+[Unit]
+Description=Etermory - limpeza da Lixeira (RN14)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=etermory
+Group=etermory
+WorkingDirectory=/srv/etermory
+EnvironmentFile=/srv/etermory/.env
+ExecStart=/srv/etermory/.venv/bin/flask --app wsgi limpar-lixeira

@@ -1,0 +1,115 @@
+classDiagram
+    direction TB
+
+    class ContextoLeitor {
+        <<dataclass>>
+        +int usuario_id
+        +set~int~ seguindo_ids
+        +set~int~ melhor_amigo_de_ids
+        +segue(autor_id: int) bool
+        +eh_melhor_amigo_de(autor_id: int) bool
+    }
+
+    class PoliticaAcesso {
+        +pode_ver(leitor: ContextoLeitor, polaroid) bool
+        +pode_comentar(leitor: ContextoLeitor, polaroid) bool
+    }
+
+    class RegraVisibilidade {
+        <<abstract>>
+        +pode_ver(leitor: ContextoLeitor, polaroid)* bool
+    }
+    class RegraPublica {
+        +pode_ver(leitor, polaroid) bool
+    }
+    class RegraSeguidores {
+        +pode_ver(leitor, polaroid) bool
+    }
+    class RegraMelhoresAmigos {
+        +pode_ver(leitor, polaroid) bool
+    }
+    class RegraSomenteEu {
+        +pode_ver(leitor, polaroid) bool
+    }
+    class FabricaRegraVisibilidade {
+        +obter(visibilidade: Visibilidade)$ RegraVisibilidade
+    }
+
+    class RegraComentario {
+        <<abstract>>
+        +pode_comentar(leitor: ContextoLeitor, polaroid)* bool
+    }
+    class RegraComentarTodos
+    class RegraComentarSeguidores
+    class RegraComentarMelhoresAmigos
+    class RegraComentarNinguem
+    class FabricaRegraComentario {
+        +obter(modo: ModoComentarios)$ RegraComentario
+    }
+
+    RegraVisibilidade <|-- RegraPublica
+    RegraVisibilidade <|-- RegraSeguidores
+    RegraVisibilidade <|-- RegraMelhoresAmigos
+    RegraVisibilidade <|-- RegraSomenteEu
+    FabricaRegraVisibilidade ..> RegraVisibilidade : cria
+
+    RegraComentario <|-- RegraComentarTodos
+    RegraComentario <|-- RegraComentarSeguidores
+    RegraComentario <|-- RegraComentarMelhoresAmigos
+    RegraComentario <|-- RegraComentarNinguem
+    FabricaRegraComentario ..> RegraComentario : cria
+
+    PoliticaAcesso ..> FabricaRegraVisibilidade : usa
+    PoliticaAcesso ..> FabricaRegraComentario : usa
+    PoliticaAcesso ..> ContextoLeitor
+
+    class Notificacao {
+        <<abstract>>
+        +int id
+        +str tipo
+        +int destinatario_id
+        +int remetente_id
+        +int polaroid_id
+        +int comentario_id
+        +bool lida
+        +datetime criado_em
+        +texto()* str
+        +link()* str
+        +marcar_como_lida() None
+    }
+    class NotificacaoCurtida {
+        +texto() str
+        +link() str
+    }
+    class NotificacaoComentario {
+        +texto() str
+        +link() str
+    }
+    class NotificacaoSeguidor {
+        +texto() str
+        +link() str
+    }
+    class NotificacaoSolicitacao {
+        +texto() str
+        +link() str
+    }
+    class NotificacaoSolicitacaoAceita {
+        +texto() str
+        +link() str
+    }
+    class NotificacaoMencao {
+        +texto() str
+        +link() str
+    }
+    class GeradorNotificacoes {
+        +extrair_mencoes(texto: str)$ set~str~
+        +deve_notificar(remetente_id: int, destinatario_id: int)$ bool
+    }
+
+    Notificacao <|-- NotificacaoCurtida
+    Notificacao <|-- NotificacaoComentario
+    Notificacao <|-- NotificacaoSeguidor
+    Notificacao <|-- NotificacaoSolicitacao
+    Notificacao <|-- NotificacaoSolicitacaoAceita
+    Notificacao <|-- NotificacaoMencao
+    GeradorNotificacoes ..> Notificacao : decide criação

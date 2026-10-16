@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "componentes/macros.html" import campo with context %}
+{% block titulo %}Configurações{% endblock %}
+{% block conteudo %}
+<h1>Configurações</h1>
+
+<section class="cartao">
+  <h2>Privacidade</h2>
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ campo(form.conta_privada) }}
+    <p class="dica">Conta privada: novas pessoas precisam pedir vínculo. Ao voltar para pública, as solicitações pendentes são aceitas.</p>
+    {{ campo(form.modo_comentarios_padrao) }}
+    {{ form.enviar(class="botao botao-primario") }}
+  </form>
+</section>
+
+<section class="cartao">
+  <h2>Tema</h2>
+  <button type="button" class="botao" data-alternar-tema>Alternar tema claro/escuro</button>
+</section>
+
+<section class="cartao">
+  <h2>Senha</h2>
+  <form method="post" novalidate>
+    {{ form_senha.hidden_tag() }}
+    {{ campo(form_senha.senha_atual, autocomplete="current-password") }}
+    {{ campo(form_senha.nova_senha, autocomplete="new-password") }}
+    {{ campo(form_senha.confirmar, autocomplete="new-password") }}
+    {{ form_senha.enviar_senha(class="botao") }}
+  </form>
+</section>
+{% endblock %}

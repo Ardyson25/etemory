@@ -1,0 +1,55 @@
+flowchart LR
+    Visitante((Visitante))
+    Usuario((Usuário))
+    Autor((Autor da Polaroid))
+    Agendador((Agendador do sistema))
+    Nginx((Nginx / Administrador))
+
+    subgraph Etermory
+        UC01([UC01 Cadastrar conta])
+        UC02([UC02 Entrar e sair])
+        UC03([UC03 Editar Prontuário])
+        UC04([UC04 Tornar conta privada])
+        UC05([UC05 Ver Prontuário])
+        UC06([UC06 Ver timeline])
+        UC07([UC07 Seguir / deixar de seguir])
+        UC08([UC08 Solicitar vínculo])
+        UC09([UC09 Responder solicitação])
+        UC10([UC10 Gerenciar melhores amigos])
+        UC11([UC11 Curtir])
+        UC12([UC12 Comentar])
+        UC13([UC13 Ver notificações])
+        UC14([UC14 Publicar Polaroid])
+        UC15([UC15 Editar Polaroid])
+        UC16([UC16 Definir privacidade e comentários])
+        UC17([UC17 Arquivar / desarquivar])
+        UC18([UC18 Excluir e restaurar da Lixeira])
+        UC19([UC19 Gerenciar álbuns])
+        UC20([UC20 Limpar Lixeira após 30 dias])
+        UC21([UC21 Verificar saúde da instância])
+    end
+
+    Visitante --> UC01
+    Visitante --> UC02
+    Usuario --> UC03
+    Usuario --> UC04
+    Usuario --> UC05
+    Usuario --> UC06
+    Usuario --> UC07
+    Usuario --> UC08
+    Usuario --> UC09
+    Usuario --> UC10
+    Usuario --> UC11
+    Usuario --> UC12
+    Usuario --> UC13
+    Usuario --> UC14
+    Usuario --> UC19
+    Autor --> UC15
+    Autor --> UC16
+    Autor --> UC17
+    Autor --> UC18
+    Agendador --> UC20
+    Nginx --> UC21
+
+    UC14 -. inclui .-> UC16
+    UC12 -. inclui .-> UC13

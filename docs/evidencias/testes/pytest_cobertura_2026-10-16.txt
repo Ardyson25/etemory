@@ -1,0 +1,63 @@
+........................................................................ [ 69%]
+................................                                         [100%]
+=============================== tests coverage ================================
+______________ coverage: platform win32, python 3.12.10-final-0 _______________
+
+Name                                         Stmts   Miss Branch BrPart  Cover   Missing
+----------------------------------------------------------------------------------------
+app\__init__.py                                100     22     20      6    73%   43, 47, 71, 83, 89-92, 101-104, 108, 123-127, 161-164
+app\config.py                                   51      3      6      3    89%   17, 25, 27
+app\domain\__init__.py                           0      0      0      0   100%
+app\domain\comentarios.py                       23      0      0      0   100%
+app\domain\contexto.py                          16      0      0      0   100%
+app\domain\enums.py                             61      0      0      0   100%
+app\domain\excecoes.py                           7      0      0      0   100%
+app\domain\notificacoes.py                      15      0      4      1    95%   23->20
+app\domain\politica_acesso.py                   19      0      8      0   100%
+app\domain\tempo.py                              3      0      0      0   100%
+app\domain\validacoes.py                        45      1     14      1    97%   42
+app\domain\visibilidade.py                      29      0      4      0   100%
+app\extensions.py                               25      0      2      1    96%   41->exit
+app\forms\__init__.py                            5      0      0      0   100%
+app\forms\album.py                               9      0      0      0   100%
+app\forms\auth.py                               16      0      0      0   100%
+app\forms\comum.py                              14      0      0      0   100%
+app\forms\perfil.py                             23      0      0      0   100%
+app\forms\polaroid.py                           30      0      2      0   100%
+app\models\__init__.py                           7      0      0      0   100%
+app\models\album.py                             52      3      8      1    90%   91, 102-103
+app\models\base.py                               4      0      0      0   100%
+app\models\interacoes.py                        47      1      2      0    98%   86
+app\models\notificacao.py                       77     12      0      0    84%   73, 76, 93, 117, 124, 127, 136, 139, 146-147, 150-151
+app\models\polaroid.py                         134      6     22      6    92%   167, 182->181, 200, 213, 219, 235, 239
+app\models\usuario.py                           58      2      4      2    94%   62->exit, 73, 99
+app\models\vinculo.py                           72      2     10      1    96%   109, 121
+app\repositories\__init__.py                     6      0      0      0   100%
+app\repositories\album_repository.py            13      1      2      1    87%   18
+app\repositories\base.py                        19      1      2      1    90%   25
+app\repositories\notificacao_repository.py      16      0      0      0   100%
+app\repositories\polaroid_repository.py         50      2      0      0    96%   126-134
+app\repositories\usuario_repository.py          32      0      4      0   100%
+app\repositories\vinculo_repository.py          26      0      0      0   100%
+app\routes\__init__.py                           0      0      0      0   100%
+app\routes\_comum.py                            21      1      6      1    93%   31
+app\routes\albuns.py                            59      9      6      2    83%   29-30, 42->44, 45-48, 67-69, 85-86
+app\routes\auth.py                              40      2     10      2    92%   18, 34
+app\routes\notificacoes.py                      20      0      0      0   100%
+app\routes\perfil.py                           121      8     16      1    93%   81->83, 89-90, 96-97, 126-127, 147-148
+app\routes\polaroids.py                        130     23     18      6    80%   37, 43-44, 57->68, 69-76, 86->88, 106, 114-115, 133, 156-158, 164-166, 180-182
+app\routes\saude.py                              6      0      0      0   100%
+app\routes\timeline.py                          16      0      2      0   100%
+app\services\__init__.py                         0      0      0      0   100%
+app\services\album_service.py                   53     11      4      1    79%   34-39, 50, 73-76
+app\services\auth_service.py                    24      1      6      1    93%   20
+app\services\interacao_service.py               53      4      8      1    92%   49, 57-65
+app\services\midia_service.py                   53      1     10      1    97%   44
+app\services\notificacao_service.py             44      0     10      1    98%   70->66
+app\services\polaroid_service.py               118      2     14      1    98%   129, 160
+app\services\timeline_service.py                18      0      0      0   100%
+app\services\usuario_service.py                 49      9     12      2    79%   33->38, 39-42, 44-48
+app\services\vinculo_service.py                 92      6     30      5    91%   35, 44, 70, 72, 80, 115
+----------------------------------------------------------------------------------------
+TOTAL                                         2021    133    266     49    92%
+104 passed in 18.21s

@@ -1,0 +1,35 @@
+# /etc/systemd/system/etermory.service  (vm-app1 e vm-app2)
+[Unit]
+Description=Etermory (Gunicorn + Flask)
+# Só sobe depois da rede e da pasta de fotos (NFS) montada.
+After=network-online.target remote-fs.target
+Wants=network-online.target
+RequiresMountsFor=/srv/etermory-uploads
+
+[Service]
+Type=simple
+User=etermory
+Group=etermory
+WorkingDirectory=/srv/etermory
+EnvironmentFile=/srv/etermory/.env
+ExecStart=/srv/etermory/.venv/bin/gunicorn -c gunicorn.conf.py wsgi:app
+# "reload" recarrega o código sem derrubar pedidos (SIGHUP no Gunicorn).
+ExecReload=/bin/kill -s HUP $MAINPID
+
+# Se o processo morrer por qualquer motivo, o systemd sobe de novo em 3 s.
+Restart=always
+RestartSec=3
+# Parada: SIGTERM (o Gunicorn termina os pedidos em andamento); depois de
+# 30 s sem terminar, o systemd manda SIGKILL.
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+# Proteções: o serviço não ganha privilégios nem escreve fora destas pastas.
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes
+ReadWritePaths=/srv/etermory-uploads /var/log/etermory
+
+[Install]
+WantedBy=multi-user.target

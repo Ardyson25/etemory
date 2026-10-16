@@ -1,0 +1,27 @@
+flowchart LR
+    Login["T01 Login"] -->|criar conta| Cadastro["T02 Cadastro"]
+    Cadastro --> Timeline
+    Login --> Timeline["T03 Timeline"]
+
+    Timeline --> Nova["T04 Nova Polaroid"]
+    Nova -->|registrar| Aberta["T05 Polaroid aberta"]
+    Timeline --> Aberta
+    Aberta -->|editar| Nova
+    Aberta -->|autor| OutroPerfil["T07 Prontuário de outro"]
+
+    Timeline --> Notif["T11 Notificações"]
+    Notif --> Aberta
+    Notif --> OutroPerfil
+    Notif --> Vinc["T09 Vínculos"]
+
+    Timeline --> Meu["T06 Meu Prontuário"]
+    Meu --> Editar["T08 Editar perfil"]
+    Meu --> Vinc
+    Meu --> Albuns["T10 Álbuns"]
+    Meu --> Arquivo["T12 Arquivo e Lixeira"]
+    Meu --> Config["T13 Configurações"]
+    OutroPerfil --> Vinc
+    OutroPerfil --> Albuns
+    Albuns --> Aberta
+    Arquivo --> Aberta
+    Config -->|sair| Login

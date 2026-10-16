@@ -1,0 +1,19 @@
+# Segredos e dados locais (nunca no Git)
+.env
+instance/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Editores e sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

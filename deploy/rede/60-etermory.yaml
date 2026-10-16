@@ -1,0 +1,15 @@
+# /etc/netplan/60-etermory.yaml
+# Placa 1 (enp0s3): NAT do VirtualBox, com DHCP — só para baixar pacotes.
+# Placa 2 (enp0s8): rede host-only 192.168.56.0/24 com IP FIXO.
+# Troque IP_DA_VM pelo IP da tabela (ex.: 192.168.56.11 na vm-app1) e aplique:
+#   sudo chmod 600 /etc/netplan/60-etermory.yaml && sudo netplan apply
+# Confira o nome das placas com: ip -br link
+network:
+  version: 2
+  ethernets:
+    enp0s3:
+      dhcp4: true
+    enp0s8:
+      dhcp4: false
+      addresses:
+        - IP_DA_VM/24

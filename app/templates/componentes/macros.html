@@ -1,0 +1,112 @@
+{# Macros reutilizadas. Importe com: {% from "componentes/macros.html" import ... with context %} #}
+
+{% macro avatar(usuario, classe="avatar") -%}
+  {% if usuario.foto %}
+    <img class="{{ classe }}" src="{{ url_for('polaroids.midia', nome=usuario.foto) }}" alt="Foto de {{ usuario.nome }}">
+  {% else %}
+    <img class="{{ classe }}" src="{{ url_for('static', filename='icons/avatar.svg') }}" alt="">
+  {% endif %}
+{%- endmacro %}
+
+{% macro campo(field, dica=None) -%}
+  <div class="campo {% if field.errors %}campo-erro{% endif %}">
+    {% if field.type in ("BooleanField",) %}
+      <label class="checkbox">{{ field() }} {{ field.label.text }}</label>
+    {% else %}
+      {{ field.label() }}
+      {{ field(**kwargs) }}
+    {% endif %}
+    {% if dica %}<small class="dica">{{ dica }}</small>{% endif %}
+    {% for erro in field.errors %}<small class="erro">{{ erro }}</small>{% endfor %}
+  </div>
+{%- endmacro %}
+
+{% macro acao(url, texto, classe="botao", confirmar=None) -%}
+  <form method="post" action="{{ url }}" class="inline" {% if confirmar %}data-confirmar="{{ confirmar }}"{% endif %}>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit" class="{{ classe }}">{{ texto }}</button>
+  </form>
+{%- endmacro %}
+
+{% macro polaroid_cartao(p, completa=False) -%}
+  {% set curtiu = current_user.id in p.curtidas | map(attribute="usuario_id") | list %}
+  <article class="polaroid" id="polaroid-{{ p.id }}">
+    <header class="polaroid-autor">
+      <a href="{{ url_for('perfil.prontuario', username=p.autor.username) }}">
+        {{ avatar(p.autor, "avatar avatar-pequeno") }}
+        <span><strong>{{ p.autor.nome }}</strong> <span class="discreto">@{{ p.autor.username }}</span></span>
+      </a>
+      <span class="selo" title="Quem pode ver">{{ p.visibilidade_efetiva.rotulo }}</span>
+    </header>
+
+    {% if p.foto %}
+    <a href="{{ url_for('polaroids.detalhe', polaroid_id=p.id) }}" class="polaroid-foto">
+      <img src="{{ url_for('polaroids.midia', nome=p.foto.caminho_arquivo) }}"
+           width="{{ p.foto.largura }}" height="{{ p.foto.altura }}"
+           alt="{{ p.legenda | truncate(120) }}" loading="lazy">
+    </a>
+    {% endif %}
+
+    <div class="polaroid-corpo">
+      <p class="legenda">{% if completa %}{{ p.legenda }}{% else %}{{ p.legenda | truncate(280) }}{% endif %}</p>
+
+      <p class="meta">
+        {% if p.data_memoria %}<span>{{ p.data_memoria.strftime("%d/%m/%Y") }}</span>{% endif %}
+        <span class="estado estado-{{ p.estado.name | lower }}">{{ p.estado.rotulo }}</span>
+        {% if p.foi_editada %}<span class="discreto">Editado</span>{% endif %}
+      </p>
+
+      {% if p.emocoes %}
+      <ul class="emocoes">
+        {% for e in p.emocoes %}<li>{{ e.rotulo }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if p.musica_titulo %}
+      <p class="musica">♪
+        {% if p.musica_url %}<a href="{{ p.musica_url }}" target="_blank" rel="noopener noreferrer">{% endif %}
+        {{ p.musica_titulo }}{% if p.musica_artista %} — {{ p.musica_artista }}{% endif %}
+        {% if p.musica_url %}</a>{% endif %}
+      </p>
+      {% endif %}
+      {% if p.local_nome %}<p class="local">⌖ {{ p.local_nome }}</p>{% endif %}
+
+      <footer class="polaroid-acoes">
+        <form method="post" action="{{ url_for('polaroids.curtir', polaroid_id=p.id) }}" class="inline" data-curtir>
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="curtir {% if curtiu %}curtido{% endif %}" aria-pressed="{{ 'true' if curtiu else 'false' }}">
+            <span aria-hidden="true">♥</span> <span data-total>{{ p.curtidas | length }}</span>
+          </button>
+        </form>
+        <a href="{{ url_for('polaroids.detalhe', polaroid_id=p.id) }}#comentarios">
+          {{ p.comentarios | length }} comentário{{ "s" if p.comentarios | length != 1 }}
+        </a>
+        <time class="discreto" datetime="{{ p.criado_em.isoformat() }}">{{ p.criado_em.strftime("%d/%m/%Y") }}</time>
+      </footer>
+    </div>
+  </article>
+{%- endmacro %}
+
+{% macro paginacao(pagina, endpoint) -%}
+  {% if pagina.pages > 1 %}
+  <nav class="paginacao" aria-label="Paginação">
+    {% if pagina.has_prev %}
+      <a class="botao" href="{{ url_for(endpoint, pagina=pagina.prev_num, **kwargs) }}">← Mais recentes</a>
+    {% endif %}
+    <span class="discreto">Página {{ pagina.page }} de {{ pagina.pages }}</span>
+    {% if pagina.has_next %}
+      <a class="botao" href="{{ url_for(endpoint, pagina=pagina.next_num, **kwargs) }}">Carregar mais →</a>
+    {% endif %}
+  </nav>
+  {% endif %}
+{%- endmacro %}
+
+{% macro grade(polaroids) -%}
+  <div class="grade">
+    {% for p in polaroids %}
+      <a class="grade-item" href="{{ url_for('polaroids.detalhe', polaroid_id=p.id) }}">
+        {% if p.foto %}<img src="{{ url_for('polaroids.midia', nome=p.foto.caminho_arquivo) }}" alt="{{ p.legenda | truncate(80) }}" loading="lazy">{% endif %}
+      </a>
+    {% endfor %}
+  </div>
+{%- endmacro %}

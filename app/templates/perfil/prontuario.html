@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% from "componentes/macros.html" import avatar, acao, grade, paginacao with context %}
+{% block titulo %}{{ dono.nome }} (@{{ dono.username }}){% endblock %}
+{% block conteudo %}
+<section class="prontuario">
+  <div class="capa">
+    {% if dono.capa %}<img src="{{ url_for('polaroids.midia', nome=dono.capa) }}" alt="">{% endif %}
+  </div>
+  <div class="prontuario-cabecalho">
+    {{ avatar(dono, "avatar avatar-grande") }}
+    <div>
+      <h1>{{ dono.nome }} {% if dono.conta_privada %}<span title="Conta privada" aria-label="Conta privada">🔒</span>{% endif %}</h1>
+      <p class="discreto">@{{ dono.username }}</p>
+      {% if dono.bio %}<p class="bio">{{ dono.bio }}</p>{% endif %}
+      {% if dono.site %}<p><a href="{{ dono.site }}" target="_blank" rel="noopener noreferrer">{{ dono.site }}</a></p>{% endif %}
+      <p class="contadores">
+        <a href="{{ url_for('perfil.seguidores', username=dono.username) }}"><strong>{{ contadores.seguidores }}</strong> seguidores</a>
+        <a href="{{ url_for('perfil.seguindo', username=dono.username) }}"><strong>{{ contadores.seguindo }}</strong> seguindo</a>
+      </p>
+    </div>
+    <div class="prontuario-acoes">
+      {% if relacao == EstadoRelacao.PROPRIO %}
+        <a class="botao" href="{{ url_for('perfil.editar') }}">Editar Prontuário</a>
+        <a class="botao" href="{{ url_for('perfil.solicitacoes') }}">Solicitações</a>
+        <a class="botao" href="{{ url_for('perfil.melhores_amigos') }}">Melhores amigos</a>
+        <a class="botao" href="{{ url_for('polaroids.arquivo') }}">Arquivo</a>
+        <a class="botao" href="{{ url_for('polaroids.lixeira') }}">Lixeira</a>
+      {% elif relacao == EstadoRelacao.SEGUINDO %}
+        {{ acao(url_for('perfil.deixar_de_seguir', username=dono.username), "Seguindo · deixar de seguir", "botao", "Deixar de seguir @" ~ dono.username ~ "?") }}
+      {% elif relacao == EstadoRelacao.PENDENTE %}
+        {{ acao(url_for('perfil.cancelar_solicitacao', username=dono.username), "Solicitado · cancelar") }}
+      {% else %}
+        {{ acao(url_for('perfil.seguir', username=dono.username), "Seguir", "botao botao-primario") }}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<nav class="abas">
+  <a class="aba {% if aba == 'memorias' %}ativa{% endif %}" href="{{ url_for('perfil.prontuario', username=dono.username) }}">Memórias</a>
+  <a class="aba {% if aba == 'albuns' %}ativa{% endif %}" href="{{ url_for('perfil.prontuario', username=dono.username, aba='albuns') }}">Álbuns</a>
+</nav>
+
+{% if aba == 'albuns' %}
+  {% if relacao == EstadoRelacao.PROPRIO %}<p><a class="botao botao-primario" href="{{ url_for('albuns.novo') }}">+ Novo álbum</a></p>{% endif %}
+  <div class="lista-albuns">
+    {% for a in albuns %}
+      <a class="cartao album" href="{{ url_for('albuns.detalhe', album_id=a.id) }}">
+        <strong>{{ a.titulo }}</strong> {% if not a.eh_publico %}<span aria-label="Privado">🔒</span>{% endif %}
+        {% if a.descricao %}<p class="discreto">{{ a.descricao }}</p>{% endif %}
+      </a>
+    {% else %}
+      <p class="vazio">Nenhum álbum.</p>
+    {% endfor %}
+  </div>
+{% else %}
+  {% if pagina.items %}
+    {{ grade(pagina.items) }}
+  {% elif dono.conta_privada and relacao != EstadoRelacao.PROPRIO and relacao != EstadoRelacao.SEGUINDO %}
+    <p class="vazio">Esta conta é privada. Peça um vínculo para ver as memórias.</p>
+  {% else %}
+    <p class="vazio">Nenhuma memória para mostrar.</p>
+  {% endif %}
+  {{ paginacao(pagina, 'perfil.prontuario', username=dono.username) }}
+{% endif %}
+{% endblock %}

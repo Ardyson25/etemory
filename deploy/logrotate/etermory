@@ -1,0 +1,12 @@
+# /etc/logrotate.d/etermory  (todas as VMs que têm /var/log/etermory)
+/var/log/etermory/*.log {
+    daily
+    rotate 14             # guarda 14 dias
+    compress
+    delaycompress         # o arquivo de ontem fica sem compactar para consulta
+    missingok
+    notifempty
+    copytruncate          # a aplicação continua escrevendo no mesmo arquivo
+    su etermory etermory-dev
+    create 0660 etermory etermory-dev
+}
