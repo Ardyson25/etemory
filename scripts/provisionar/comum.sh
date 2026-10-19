@@ -3,7 +3,7 @@
 # usuários e grupos, SSH só com chave e firewall com tudo bloqueado.
 #
 # Onde roda: em cada VM, uma vez, logo após instalar o Ubuntu Server:
-#   git clone <URL-DO-GITHUB> ~/etermory
+#   git clone https://github.com/Ardyson25/etemory.git ~/etermory
 #   sudo ~/etermory/scripts/provisionar/comum.sh vm-app1
 # Depois rode o script da função da VM (proxy.sh, app.sh ou db.sh).
 set -euo pipefail

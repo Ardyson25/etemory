@@ -17,7 +17,7 @@ Projeto acadêmico em **Python 3.12 + Flask 3 + SQLAlchemy 2 + PostgreSQL**, com
 ### 2. Instalar
 
 ```bash
-git clone <URL-DO-REPOSITORIO> etermory
+git clone https://github.com/Ardyson25/etemory.git etermory
 cd etermory
 python -m venv .venv
 

@@ -14,7 +14,7 @@
 | Instituição / Turma | [PREENCHER] |
 | Versão do documento | **V1 — Planejamento** (1.0) |
 | Data | 16/10/2026 |
-| Repositório | [PREENCHER: URL do GitHub] |
+| Repositório | https://github.com/Ardyson25/etemory |
 
 ### Integrantes e papéis
 

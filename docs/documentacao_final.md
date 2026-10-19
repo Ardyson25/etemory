@@ -16,7 +16,7 @@
 | Instituição / Turma | [PREENCHER] |
 | Versão do documento | **Final** (5.0) — Partes I a IV (V1 a V4 atualizadas) + Parte V: teste de indisponibilidade, recuperação, infraestrutura consolidada, lições aprendidas e rastreabilidade do enunciado |
 | Data | 16/10/2026 |
-| Repositório | [PREENCHER: URL do GitHub] |
+| Repositório | https://github.com/Ardyson25/etemory |
 
 ### Integrantes e papéis
 
@@ -1231,7 +1231,7 @@ No Firestore, listas como `followers`, `likedBy` e `allowedViewerIds` eram **cop
 
 | Item | Valor |
 |---|---|
-| URL | [PREENCHER: URL do GitHub] |
+| URL | https://github.com/Ardyson25/etemory |
 | Branch principal | `main` (protegida: só recebe código por pull request aprovado) |
 | Integração contínua | GitHub Actions (`.github/workflows/testes.yml`): roda o `pytest` com cobertura mínima de 80% em todo push e pull request |
 | Arquivos que nunca entram | `.env`, `instance/`, `.venv/` (ver `.gitignore`) |
@@ -2355,7 +2355,7 @@ Verificação: `ping -c 2 vm-db` a partir da vm-app1. [PREENCHER COM EVIDÊNCIA]
 
 ```bash
 # 1. Em CADA VM, depois de instalar o Ubuntu Server e configurar a rede (28.2):
-git clone [PREENCHER: URL do GitHub] ~/etermory
+git clone https://github.com/Ardyson25/etemory ~/etermory
 sudo ~/etermory/scripts/provisionar/comum.sh vm-db     # vm-proxy | vm-app1 | vm-app2 | vm-db
 
 # 2. vm-db (primeiro: as apps precisam do banco e do NFS)
